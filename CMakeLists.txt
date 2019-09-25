@@ -19,6 +19,11 @@ set( ELECTRICAL_ENERGY_OBJECT_SOURCE cipelectricalenergy.c )
 
 include_directories(${OpENer_ADD_CIP_OBJECTS_INCLUDES})
 
+if( OPENER_MESSAGE_DATA_REPLY_BUFFER LESS 250 )
+  message(STATUS "The Electrical Energy Object needs a larger reply message buffer - value set to 250")
+  set( OPENER_MESSAGE_DATA_REPLY_BUFFER "250" CACHE STRING "The number of bytes used for the reply message buffer" FORCE)
+endif()
+
 ##################################
 # Create library		 #
 ##################################
