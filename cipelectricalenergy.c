@@ -55,10 +55,14 @@ void InitializeCipElectricalEnergy(CipClass *class) {
 
   CipClass *meta_class = class->class_instance.cip_class;
 
-  InsertAttribute((CipInstance *) class, 1, kCipUint, (void *) &class->revision,
+  InsertAttribute((CipInstance *) class, 1, kCipUint, EncodeCipUint, (void *) &class->revision,
                   kGetableSingleAndAll); /* revision */
-  meta_class->number_of_attributes = 1;
-  meta_class->highest_attribute_number = 1;
+
+  InsertService(meta_class, kGetAttributeAll,
+                  &GetAttributeAll, "GetAttributeAll");
+  InsertService(meta_class, kGetAttributeSingle,
+                &GetAttributeSingle, "GetAttributeSingle");
+
 }
 
 EipStatus CipElectricalEnergyInit(void) {
@@ -66,7 +70,7 @@ EipStatus CipElectricalEnergyInit(void) {
   CipInstance *instance;
 
   electrical_energy_class = CreateCipClass(kCipElectricalEnergyClassCode,
-		                                   0, /* # of non-default class attributes*/
+		                                   1, /* # of non-default class attributes*/
                                            1, /* # highest class attribute number*/
                                            2, /* # class services*/
                                            41, /* # instance attributes*/
@@ -83,73 +87,73 @@ EipStatus CipElectricalEnergyInit(void) {
 
   instance = GetCipInstance(electrical_energy_class, 1);
 
-  InsertAttribute(instance, 1, kCipAny, &consumed_energy_value,
+  InsertAttribute(instance, 1, kCipAny, EncodeUINTOdometer, &consumed_energy_value,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 2, kCipAny, &produced_energy_value,
+  InsertAttribute(instance, 2, kCipAny, EncodeUINTOdometer, &produced_energy_value,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 3, kCipAny, &total_energy_value,
+  InsertAttribute(instance, 3, kCipAny, EncodeINTOdometer, &total_energy_value,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 4, kCipAny, &dummy_odometer, kGetableSingleAndAll);
-  InsertAttribute(instance, 5, kCipAny, &dummy_odometer, kGetableSingleAndAll);
-  InsertAttribute(instance, 6, kCipAny, &dummy_odometer, kGetableSingleAndAll);
-  InsertAttribute(instance, 7, kCipAny, &dummy_odometer, kGetableSingleAndAll);
-  InsertAttribute(instance, 8, kCipAny, &dummy_odometer, kGetableSingleAndAll);
-  InsertAttribute(instance, 9, kCipReal, &line_frequency, kGetableSingleAndAll);
-  InsertAttribute(instance, 10, kCipReal, &l1_current, kGetableSingleAndAll);
-  InsertAttribute(instance, 11, kCipReal, &l2_current, kGetableSingleAndAll);
-  InsertAttribute(instance, 12, kCipReal, &l3_current, kGetableSingleAndAll);
-  InsertAttribute(instance, 13, kCipReal, &average_current,
+  InsertAttribute(instance, 4, kCipAny, EncodeUINTOdometer, &dummy_odometer, kGetableSingleAndAll);
+  InsertAttribute(instance, 5, kCipAny, EncodeUINTOdometer, &dummy_odometer, kGetableSingleAndAll);
+  InsertAttribute(instance, 6, kCipAny, EncodeINTOdometer, &dummy_odometer, kGetableSingleAndAll);
+  InsertAttribute(instance, 7, kCipAny, EncodeUINTOdometer, &dummy_odometer, kGetableSingleAndAll);
+  InsertAttribute(instance, 8, kCipAny, EncodeUINTOdometer, &dummy_odometer, kGetableSingleAndAll);
+  InsertAttribute(instance, 9, kCipReal, EncodeCipReal, &line_frequency, kGetableSingleAndAll);
+  InsertAttribute(instance, 10, kCipReal, EncodeCipReal, &l1_current, kGetableSingleAndAll);
+  InsertAttribute(instance, 11, kCipReal, EncodeCipReal, &l2_current, kGetableSingleAndAll);
+  InsertAttribute(instance, 12, kCipReal, EncodeCipReal, &l3_current, kGetableSingleAndAll);
+  InsertAttribute(instance, 13, kCipReal, EncodeCipReal, &average_current,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 14, kCipReal, &percent_current_unbalance,
+  InsertAttribute(instance, 14, kCipReal, EncodeCipReal, &percent_current_unbalance,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 15, kCipReal, &l1_n_voltage, kGetableSingleAndAll);
-  InsertAttribute(instance, 16, kCipReal, &l2_n_voltage, kGetableSingleAndAll);
-  InsertAttribute(instance, 17, kCipReal, &l3_n_voltage, kGetableSingleAndAll);
-  InsertAttribute(instance, 18, kCipReal, &average_l_n_voltage,
+  InsertAttribute(instance, 15, kCipReal, EncodeCipReal, &l1_n_voltage, kGetableSingleAndAll);
+  InsertAttribute(instance, 16, kCipReal, EncodeCipReal, &l2_n_voltage, kGetableSingleAndAll);
+  InsertAttribute(instance, 17, kCipReal, EncodeCipReal, &l3_n_voltage, kGetableSingleAndAll);
+  InsertAttribute(instance, 18, kCipReal, EncodeCipReal, &average_l_n_voltage,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 19, kCipReal, &l1_l2_voltage, kGetableSingleAndAll);
-  InsertAttribute(instance, 20, kCipReal, &l2_l3_voltage, kGetableSingleAndAll);
-  InsertAttribute(instance, 21, kCipReal, &l3_l1_voltage, kGetableSingleAndAll);
-  InsertAttribute(instance, 22, kCipReal, &average_l_l_voltage,
+  InsertAttribute(instance, 19, kCipReal, EncodeCipReal, &l1_l2_voltage, kGetableSingleAndAll);
+  InsertAttribute(instance, 20, kCipReal, EncodeCipReal, &l2_l3_voltage, kGetableSingleAndAll);
+  InsertAttribute(instance, 21, kCipReal, EncodeCipReal, &l3_l1_voltage, kGetableSingleAndAll);
+  InsertAttribute(instance, 22, kCipReal, EncodeCipReal, &average_l_l_voltage,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 23, kCipReal, &percent_voltage_unbalance,
+  InsertAttribute(instance, 23, kCipReal, EncodeCipReal, &percent_voltage_unbalance,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 24, kCipReal, &l1_real_power, kGetableSingleAndAll);
-  InsertAttribute(instance, 25, kCipReal, &l2_real_power, kGetableSingleAndAll);
-  InsertAttribute(instance, 26, kCipReal, &l3_real_power, kGetableSingleAndAll);
-  InsertAttribute(instance, 27, kCipReal, &total_real_power,
+  InsertAttribute(instance, 24, kCipReal, EncodeCipReal, &l1_real_power, kGetableSingleAndAll);
+  InsertAttribute(instance, 25, kCipReal, EncodeCipReal, &l2_real_power, kGetableSingleAndAll);
+  InsertAttribute(instance, 26, kCipReal, EncodeCipReal, &l3_real_power, kGetableSingleAndAll);
+  InsertAttribute(instance, 27, kCipReal, EncodeCipReal, &total_real_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 28, kCipReal, &l1_reactive_power,
+  InsertAttribute(instance, 28, kCipReal, EncodeCipReal, &l1_reactive_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 29, kCipReal, &l2_reactive_power,
+  InsertAttribute(instance, 29, kCipReal, EncodeCipReal, &l2_reactive_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 30, kCipReal, &l3_reactive_power,
+  InsertAttribute(instance, 30, kCipReal, EncodeCipReal, &l3_reactive_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 31, kCipReal, &total_reactive_power,
+  InsertAttribute(instance, 31, kCipReal, EncodeCipReal, &total_reactive_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 32, kCipReal, &l1_apparent_power,
+  InsertAttribute(instance, 32, kCipReal, EncodeCipReal, &l1_apparent_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 33, kCipReal, &l2_apparent_power,
+  InsertAttribute(instance, 33, kCipReal, EncodeCipReal, &l2_apparent_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 34, kCipReal, &l3_apparent_power,
+  InsertAttribute(instance, 34, kCipReal, EncodeCipReal, &l3_apparent_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 35, kCipReal, &total_apparent_power,
+  InsertAttribute(instance, 35, kCipReal, EncodeCipReal, &total_apparent_power,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 36, kCipReal, &l1_true_power_factor,
+  InsertAttribute(instance, 36, kCipReal, EncodeCipReal, &l1_true_power_factor,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 37, kCipReal, &l2_true_power_factor,
+  InsertAttribute(instance, 37, kCipReal, EncodeCipReal, &l2_true_power_factor,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 38, kCipReal, &l3_true_power_factor,
+  InsertAttribute(instance, 38, kCipReal, EncodeCipReal, &l3_true_power_factor,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 39, kCipReal, &three_phase_true_power_factor,
+  InsertAttribute(instance, 39, kCipReal, EncodeCipReal, &three_phase_true_power_factor,
                   kGetableSingleAndAll);
-  InsertAttribute(instance, 40, kCipUint, &phase_rotation,
+  InsertAttribute(instance, 40, kCipUint, EncodeCipUint, &phase_rotation,
                   kGetableSingleAndAll);
 
   //Required Instance Attributes: Energy Type Specific Object Path (ID=12): Struct of:
   //  Path Size (UINT)
   //  Path (EPATH)
-  InsertAttribute(instance, 41, kCipEpath, &associated_base_energy_object_path,
+  InsertAttribute(instance, 41, kCipEpath, EncodeCipEPath, &associated_base_energy_object_path,
                   kGetableSingle);
 
   /* class services */
@@ -157,7 +161,7 @@ EipStatus CipElectricalEnergyInit(void) {
 
   /* use Class-specific GetAttributeSingle method to allow special handling of odo-meter-values */
   InsertService(electrical_energy_class, kGetAttributeSingle,
-                &GetAttributeSingleElectricalEnergy, "GetAttributeSingle");
+                &GetAttributeSingle, "GetAttributeSingle");
 
   InsertService(electrical_energy_class, kGetAttributeAll,
                 &GetAttributeAll, "GetAttributeAll");
@@ -167,87 +171,6 @@ EipStatus CipElectricalEnergyInit(void) {
   return kEipStatusOk;
 }
 
-EipStatus GetAttributeSingleElectricalEnergy(CipInstance *RESTRICT const instance,
-        CipMessageRouterRequest *const message_router_request,
-        CipMessageRouterResponse *const message_router_response,
-        const struct sockaddr *originator_address,
-        const int encapsulation_session) {
-  EipStatus nRetVal = kEipStatusOkSend;
-  CipByte *pacMsg = message_router_response->data;
-
-  message_router_response->data_length = 0;
-  message_router_response->reply_service = (0x80
-      | message_router_request->service);
-  message_router_response->general_status = kCipErrorAttributeNotSupported;
-  message_router_response->size_of_additional_status = 0;
-
-  EipUint16 attribute_number = message_router_request->request_path
-      .attribute_number;
-
-  CipAttributeStruct *attribute = GetCipAttribute(instance, attribute_number);
-
-  if ((NULL != attribute) && (NULL != attribute->data)) {
-    uint8_t get_bit_mask = 0;
-    if (kGetAttributeAll == message_router_request->service) {
-      get_bit_mask = (instance->cip_class->get_all_bit_mask[CalculateIndex(
-          attribute_number)]);
-      message_router_response->general_status = kCipErrorSuccess;
-    } else {
-      get_bit_mask = (instance->cip_class->get_single_bit_mask[CalculateIndex(
-          attribute_number)]);
-    }
-    if (0 != (get_bit_mask & (1 << (attribute_number % 8)))) {
-      OPENER_TRACE_INFO("getAttribute %d\n",
-                        message_router_request->request_path.attribute_number);
-
-      switch (attribute_number) {
-        case 1:  //Real Consumed Energy
-        {
-          message_router_response->data_length = encodeUINTOdometer(
-              consumed_energy_value, &pacMsg);
-        }
-          break;
-        case 2:  //Real Produced Energy
-        {
-          message_router_response->data_length = encodeUINTOdometer(
-              produced_energy_value, &pacMsg);
-        }
-          break;
-        case 3:  //Real Net Energy
-        {
-          message_router_response->data_length = encodeINTOdometer(
-              total_energy_value, &pacMsg);
-        }
-          break;
-        case 4:  //Reactive Energy Consumed Odometer
-        case 5:  //Reactive Energy Prod. Odometer
-        case 7:  //Apparent Energy Odometer
-        case 8:  //Kiloampere-Hours Odometer
-          message_router_response->data_length = encodeUINTOdometer(
-              dummy_odometer, &pacMsg);
-          break;
-        case 6:  //Reactive Energy Net Odometer
-          message_router_response->data_length = encodeINTOdometer(
-              dummy_odometer, &pacMsg);
-          break;
-
-        default:
-          nRetVal = GetAttributeSingle(instance,
-        		                       message_router_request,
-                                       message_router_response,
-                                       originator_address,
-									   encapsulation_session);
-          break;
-      }
-    }
-
-    if (0 < message_router_response->data_length) {
-      message_router_response->general_status = kCipErrorSuccess;
-    }
-  }
-
-  return nRetVal;
-}
 
 /** @brief Updates Energy Object values based on measured data
  *
